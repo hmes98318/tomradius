@@ -70,9 +70,9 @@ CREATE TABLE IF NOT EXISTS radcheck (
     employee_name VARCHAR(64) NOT NULL DEFAULT '',
     description VARCHAR(255) NOT NULL DEFAULT '',
     creator VARCHAR(64) NOT NULL DEFAULT '',
+    -- END custom columns --
     PRIMARY KEY (id),
     KEY username (username(32))
-    -- END custom columns --
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
