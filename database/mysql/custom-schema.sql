@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS radcheck (
     employee_name VARCHAR(64) NOT NULL DEFAULT '',
     description VARCHAR(255) NOT NULL DEFAULT '',
     creator VARCHAR(64) NOT NULL DEFAULT '',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     -- END custom columns --
     PRIMARY KEY (id),
     KEY username (username(32))
