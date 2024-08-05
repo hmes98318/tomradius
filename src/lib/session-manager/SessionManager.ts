@@ -5,7 +5,7 @@ import { IPBlocker } from "./IPBlocker.js";
 import type { IPBlockerConfig, SessionManagerConfig } from '../../@types/Config.types.js';
 
 
-export interface SessionData {
+export type SessionData = {
     username: string            // 登入的帳號名稱
     createdAt: number;          // Create time (ms)
 }

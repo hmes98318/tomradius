@@ -1,7 +1,7 @@
 import type { IPBlockerConfig } from "../../@types/Config.types.js";
 
 
-export interface IPInfo {
+export type IPInfo = {
     retry: number;                      // Retry count
     block: boolean;                     // Whether blocked
     createdAt: number;                  // Create time (ms)
