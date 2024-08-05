@@ -1,10 +1,10 @@
 /**
- * 獲取 radius 授權帳號清單
+ * 獲取 radius 授權紀錄
  * 
  * 參數:
  * 無參數
  */
-export const path = '/api/radius/list';
+export const path = '/api/radius/authRecord';
 export const method = 'GET';
 export const loginRequired = true;
 
@@ -19,7 +19,7 @@ import type { ResultData } from '../../../@types/Express.types.js';
 
 export async function execute(req: Request, res: Response, config: ApiConfig, db: Database): Promise<ResultData> {
 
-    const query = `SELECT * FROM radcheck;`;
+    const query = `SELECT * FROM radpostauth;`;
     const result = await db.query(query);
 
 
