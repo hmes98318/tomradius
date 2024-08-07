@@ -9,6 +9,7 @@ import express, { Request, Response } from 'express';
 import { LoadType } from '../@types/Express.types.js';
 
 import type { Database } from '../lib/database/MySQL.js';
+import type { Logger } from '../lib/logger/Logger.js';
 import type { SessionManager } from '../lib/session-manager/SessionManager.js';
 import type { ApiConfig } from '../@types/Config.types.js';
 import type { EventListeners, Route } from '../@types/Express.types.js';
@@ -27,14 +28,16 @@ export class App extends EventEmitter implements AppEvents {
     #db: Database;                      // Database
     #routes: Route[] = [];              // Routes cache
     #sessionManager: SessionManager;    // Session manager
+    #logger: Logger;                    // Logger
 
 
-    constructor(config: ApiConfig, db: Database, sessionManager: SessionManager) {
+    constructor(config: ApiConfig, db: Database, sessionManager: SessionManager, logger: Logger) {
         super();
         this.config = config;
 
         this.#db = db;
         this.#sessionManager = sessionManager;
+        this.#logger = logger;
 
         this.#app = express();
         this.#setMiddleware();
@@ -222,7 +225,7 @@ export class App extends EventEmitter implements AppEvents {
             this.emit('request', req);
 
             try {
-                const result = await execute(req, res, this.config, this.#db, this.#sessionManager);
+                const result = await execute(req, res, this.config, this.#db, this.#sessionManager, this.#logger);
                 res.json(result);
 
                 this.emit('response', res);
