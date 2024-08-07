@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { OPType } from '../../@types/Logger.types.js';
+
 import type { Database } from '../../lib/database/MySQL.js';
 import type { LoggerEvents } from '../../@types/Logger.types.js';
 
@@ -27,10 +28,6 @@ export class Logger extends EventEmitter {
         return super.on(event, listener);
     }
 
-
-    public async getLogs() {
-
-    }
 
     /**
      * 外部 emit()
