@@ -14,18 +14,21 @@ export const loginRequired = true;
 
 
 import cookie from "cookie";
+
 import { rangeCheck } from '../../../utils/rangeCheck.js';
 import { LoadType } from '../../../@types/Express.types.js';
+import { OPType } from "../../../@types/Logger.types.js";
 
 import type { Request, Response } from 'express';
-import type { QueryResult } from 'mysql2/promise';
+import type { QueryResult, RowDataPacket } from 'mysql2/promise';
 import type { Database } from '../../../lib/database/MySQL.js';
+import type { Logger } from '../../../lib/logger/Logger.js';
 import type { SessionManager } from '../../../lib/session-manager/SessionManager.js';
 import type { ApiConfig } from '../../../@types/Config.types.js';
 import type { ResultData } from '../../../@types/Express.types.js';
 
 
-export async function execute(req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager): Promise<ResultData> {
+export async function execute(req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager, logger: Logger): Promise<ResultData> {
 
     // 參數檢查
     if (
@@ -56,6 +59,7 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         };
     }
 
+
     const newData = {
         radcheck_id: Number(req.body.radcheck_id),
         mac_address: req.body.mac_address,
@@ -64,8 +68,43 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         description: req.body.description,
         creator: sessionData.username
     };
+    const oldData = {
+        mac_address: '',
+        computer_name: '',
+        employee_name: '',
+        description: ''
+    };
 
     try {
+        const getDataQuery = `
+            SELECT 
+                username,
+                computer_name,
+                employee_name,
+                description
+            FROM 
+                radcheck
+            WHERE
+                id = ${newData.radcheck_id};
+        `;
+        const getDataResult = await db.query(getDataQuery) as RowDataPacket[];
+
+        if (getDataResult.length === 0) {
+            logger.emit('radcheck', newData.creator, OPType.RAD_DELETE, false, `未找到請求修改的 MAC_ADDRESS (${newData.mac_address})`);
+            return {
+                loadType: LoadType.DATA_NOT_FOUND,
+                data: []
+            };
+        }
+
+
+        // oldData 用來好判斷參數而已 0.0
+        oldData.mac_address = getDataResult[0].username;
+        oldData.computer_name = getDataResult[0].computer_name;
+        oldData.employee_name = getDataResult[0].employee_name;
+        oldData.description = getDataResult[0].description;
+
+
         // 檢查新的 mac_address 是否有衝突(已存在)
         const checkQuery = `
             SELECT EXISTS (
@@ -80,6 +119,7 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         const checkResult = await db.query(checkQuery) as QueryResult[];
 
         if (!!Number((checkResult[0] as any).record_exists)) {
+            logger.emit('radcheck', newData.creator, OPType.RAD_EDIT, false, `添加了已存在的 MAC_ADDRESS (${newData.mac_address})`);
             return {
                 loadType: LoadType.DATA_EXISTED,
                 data: []
@@ -114,6 +154,14 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         };
     }
 
+
+    // 檢查修改了哪些值並寫入 log
+    newData.mac_address = (newData.mac_address === oldData.mac_address ? 'NULL' : `新值(${newData.mac_address}), 舊值(${oldData.mac_address})`);
+    newData.computer_name = (newData.computer_name === oldData.computer_name ? 'NULL' : `新值(${newData.computer_name}), 舊值(${oldData.computer_name})`);
+    newData.employee_name = (newData.employee_name === oldData.employee_name ? 'NULL' : `新值(${newData.employee_name}), 舊值(${oldData.employee_name})`);
+    newData.description = (newData.description === oldData.description ? 'NULL' : `新值(${newData.description}), 舊值(${oldData.description})`);
+
+    logger.emit('radcheck', newData.creator, OPType.RAD_EDIT, true, newData.mac_address, newData.computer_name, newData.employee_name, newData.description);
 
     return {
         loadType: LoadType.SUCCEED,

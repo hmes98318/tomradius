@@ -13,12 +13,13 @@ import { LoadType } from '../../../@types/Express.types.js';
 
 import type { Request, Response } from 'express';
 import type { Database } from '../../../lib/database/MySQL.js';
+import type { Logger } from "../../../lib/logger/Logger.js";
 import type { SessionManager } from '../../../lib/session-manager/SessionManager.js';
 import type { ApiConfig } from '../../../@types/Config.types.js';
 import type { ResultData } from "../../../@types/Express.types.js";
 
 
-export async function execute(req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager): Promise<ResultData> {
+export async function execute(req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager, logger: Logger): Promise<ResultData> {
 
     // 參數檢查
     if (
@@ -32,11 +33,14 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
     }
 
 
-
+    const username = req.body.username;
+    const password = req.body.password;
     const userIp = (req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.ip) as string;
 
     // 檢查是否嘗試過多登入
     if (sessionManager.ipBlocker.checkBlocked(userIp)) {
+        logger.emit('normal-login', username, userIp, false);
+
         return {
             loadType: LoadType.BLOCKED_LOGIN,
             data: []
@@ -49,6 +53,7 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
 
     // 已登入的狀態跳過登入 (存在 sessionId)
     if (sessionManager.checkSession(cookieSessionId)) {
+        logger.emit('normal-login', username, userIp, true);
         sessionManager.refreshSession(cookieSessionId);
 
         return {
@@ -62,12 +67,11 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
     }
 
 
-    const username = req.body.username;
-    const password = req.body.password;
     const sessionId = await sessionManager.createSession(username, password);
 
     // 登入失敗 (帳號密碼錯誤)
     if (!sessionId) {
+        logger.emit('normal-login', username, userIp, false);
         sessionManager.ipBlocker.add(userIp);
 
         return {
@@ -78,9 +82,11 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
 
 
     // 登入成功
+    logger.emit('normal-login', username, userIp, true);
     sessionManager.ipBlocker.delete(userIp);
 
     res.cookie('sessionId', sessionId);
+
     return {
         loadType: LoadType.SUCCEED,
         data: [

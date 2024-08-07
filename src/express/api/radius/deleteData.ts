@@ -9,15 +9,21 @@ export const method = 'DELETE';
 export const loginRequired = true;
 
 
+import cookie from "cookie";
+
 import { LoadType } from '../../../@types/Express.types.js';
+import { OPType } from '../../../@types/Logger.types.js';
 
 import type { Request, Response } from 'express';
+import type { RowDataPacket } from "mysql2/promise";
 import type { Database } from '../../../lib/database/MySQL.js';
+import type { Logger } from '../../../lib/logger/Logger.js';
+import type { SessionManager } from "../../../lib/session-manager/SessionManager.js";
 import type { ApiConfig } from '../../../@types/Config.types.js';
 import type { ResultData } from '../../../@types/Express.types.js';
 
 
-export async function execute(req: Request, res: Response, config: ApiConfig, db: Database): Promise<ResultData> {
+export async function execute(req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager, logger: Logger): Promise<ResultData> {
 
     // 參數檢查
     if (typeof (req.body.radcheck_id) !== 'number' || !Number.isInteger(req.body.radcheck_id)) {
@@ -28,28 +34,33 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
     }
 
 
+    /**
+     * 從 cookie.sessionId 獲取使用者
+     */
+    const cookies = cookie.parse(req.headers.cookie as string || '');
+    const cookieSessionId = cookies.sessionId;
+    const sessionData = sessionManager.getSession(cookieSessionId);
+
+    if (!sessionData) {
+        return {
+            loadType: LoadType.UNAUTHORIZED,
+            data: []
+        };
+    }
+
+    const creator = sessionData.username;
     const radcheck_id = Number(req.body.radcheck_id);
+    let mac_address = '';
 
     try {
-        /**
-         * ResultSetHeader {
-         *     fieldCount: 0,
-         *     affectedRows: 1,
-         *     insertId: 0,
-         *     info: '',
-         *     serverStatus: 2,
-         *     warningStatus: 0,
-         *     changedRows: 0
-         * }
-         */
-        const accountQuery = `DELETE FROM radcheck WHERE id = ${radcheck_id};`;
-        const result = await db.query(accountQuery);
-        const affectedRows = Number((result as any)['affectedRows'] ?? -1);
+        const checkQuery = `SELECT username FROM radcheck WHERE id = ${radcheck_id};`;
+        const checkResult = await db.query(checkQuery) as RowDataPacket[];
 
-        // radcheck_id 不存在
-        if (affectedRows <= 0) {
+        if (checkResult.length === 0) {
+            logger.emit('radcheck', creator, OPType.RAD_DELETE, false, `未找到請求刪除的 MAC_ADDRESS (radcheck_id = ${radcheck_id})`);
+
             return {
-                loadType: LoadType.ACCOUNT_NOT_EXISTS,
+                loadType: LoadType.DATA_NOT_FOUND,
                 data: [
                     {
                         radcheck_id: radcheck_id
@@ -57,6 +68,12 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
                 ]
             };
         }
+
+        mac_address = checkResult[0].username;
+
+
+        const query = `DELETE FROM radcheck WHERE id = ${radcheck_id};`;
+        await db.query(query);
     } catch (error) {
         console.log(path, error);
         return {
@@ -65,6 +82,8 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         };
     }
 
+
+    logger.emit('radcheck', creator, OPType.RAD_DELETE, true, mac_address);
 
     return {
         loadType: LoadType.SUCCEED,

@@ -13,18 +13,21 @@ export const loginRequired = true;
 
 
 import cookie from "cookie";
+
+import { OPType } from "../../../@types/Logger.types.js";
 import { rangeCheck } from '../../../utils/rangeCheck.js';
 import { LoadType } from '../../../@types/Express.types.js';
 
 import type { Request, Response } from 'express';
-import type { QueryResult } from 'mysql2/promise';
+import type { QueryResult, ResultSetHeader } from 'mysql2/promise';
 import type { Database } from '../../../lib/database/MySQL.js';
+import type { Logger } from "../../../lib/logger/Logger.js";
 import type { SessionManager } from '../../../lib/session-manager/SessionManager.js';
 import type { ApiConfig } from '../../../@types/Config.types.js';
 import type { ResultData } from '../../../@types/Express.types.js';
 
 
-export async function execute(req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager): Promise<ResultData> {
+export async function execute(req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager, logger: Logger): Promise<ResultData> {
 
     // 參數檢查
     if (
@@ -61,6 +64,7 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         description: req.body.description,
         creator: sessionData.username
     };
+    let result: ResultSetHeader;
 
     try {
         // Check if mac_address exist
@@ -72,6 +76,8 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         const checkResult = await db.query(checkQuery) as QueryResult[];
 
         if (!!Number((checkResult[0] as any).record_exists)) {
+            logger.emit('radcheck', newData.creator, OPType.RAD_ADD, false, `添加了已存在的 MAC_ADDRESS (${newData.mac_address})`);
+
             return {
                 loadType: LoadType.DATA_EXISTED,
                 data: []
@@ -101,7 +107,7 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
                 "${newData.creator}"
             );
         `;
-        const result = await db.query(query);
+        result = await db.query(query) as ResultSetHeader;
         console.log(path, result);
 
     } catch (error) {
@@ -112,6 +118,8 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         };
     }
 
+
+    logger.emit('radcheck', newData.creator, OPType.RAD_ADD, true, newData.mac_address, newData.computer_name, newData.employee_name, newData.description);
 
     return {
         loadType: LoadType.SUCCEED,
