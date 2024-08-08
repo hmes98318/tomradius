@@ -25,7 +25,7 @@ export class Logger extends EventEmitter {
     }
 
     public once<EventName extends keyof LoggerEvents>(event: EventName, listener: LoggerEvents[EventName]): this {
-        return super.on(event, listener);
+        return super.once(event, listener);
     }
 
 
