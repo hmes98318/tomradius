@@ -23,8 +23,8 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
 
     // 參數檢查
     if (
-        (typeof (req.body.username) !== 'string' || !rangeCheck.string_length(req.body.username, 100)) ||
-        (typeof (req.body.password) !== 'string' || !rangeCheck.string_length(req.body.password, 100))
+        (typeof (req.body.username) !== 'string' || !rangeCheck.string_length(req.body.username, 100) || containsSpecialChars(req.body.username)) ||
+        (typeof (req.body.password) !== 'string' || !rangeCheck.string_length(req.body.password, 100) || containsSpecialChars(req.body.password))
     ) {
         return {
             loadType: LoadType.PARAMETER_ERROR,
@@ -96,3 +96,9 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
         ]
     };
 }
+
+
+const containsSpecialChars = (str: string): boolean => {
+    const specialChars = [' ', '/', '\\', '|', '<', '>', '=', '\'', '"'];
+    return specialChars.some(char => str.includes(char));
+};
