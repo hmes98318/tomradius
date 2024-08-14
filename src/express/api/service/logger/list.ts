@@ -53,7 +53,9 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
             LEFT JOIN 
                 recordlogin rlogin ON r.id = rlogin.record_id
             LEFT JOIN 
-                recordrad rrad ON r.id = rrad.record_id;
+                recordrad rrad ON r.id = rrad.record_id
+            ORDER BY 
+                r.created_at DESC;
             `;
 
         if (type === 2) {
@@ -68,7 +70,9 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
                 FROM 
                     record r
                 INNER JOIN 
-                    recordlogin rlogin ON r.id = rlogin.record_id;
+                    recordlogin rlogin ON r.id = rlogin.record_id
+                ORDER BY 
+                    r.created_at DESC;
             `;
         }
         else if (type === 3) {
@@ -86,7 +90,9 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
                 FROM 
                     record r
                 INNER JOIN 
-                    recordrad rrad ON r.id = rrad.record_id;
+                    recordrad rrad ON r.id = rrad.record_id
+                ORDER BY 
+                    r.created_at DESC;
             `;
         }
 
@@ -98,6 +104,25 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
             data: []
         };
     }
+
+
+    /**
+     * 資料庫 TIMESTAMP 獲取的時區為 UTC (+0:00) (2024-07-29T05:05:05.000Z)
+     * 需轉換成 UTC+8 (2024-06-23 13:05:05)
+     * 不在 DB 端處理時區轉換, server 端處理就好
+     */
+    result = result.map((item: any) => {
+        item.created_at = new Date(item.created_at as string).toLocaleString('zh-TW', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
+        return item;
+    });
 
 
     return {
