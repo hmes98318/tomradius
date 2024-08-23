@@ -86,19 +86,11 @@ export async function execute(req: Request, res: Response, config: ApiConfig, db
 
     /**
      * 資料庫 TIMESTAMP 獲取的時區為 UTC (+0:00) (2024-07-29T05:05:05.000Z)
-     * 需轉換成 UTC+8 (2024-06-23 13:05:05)
+     * 需轉換成 UTC+8 (2024-06-23 13:05:05) // ISO 8601 
      * 不在 DB 端處理時區轉換, server 端處理就好
      */
     result = result.map((item: any) => {
-        item.created_at = new Date(item.created_at as string).toLocaleString('zh-TW', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour12: false,
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-        });
+        item.created_at = new Date(item.created_at as string).toISOString().slice(0, 19).replace('T', ' ');
         return item;
     });
 
