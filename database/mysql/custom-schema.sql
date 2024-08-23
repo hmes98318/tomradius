@@ -170,7 +170,7 @@ CREATE TABLE IF NOT EXISTS recordlogin (
     CONSTRAINT fk_recordlogin_record
         FOREIGN KEY (record_id)
         REFERENCES record(id)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -187,7 +187,7 @@ CREATE TABLE IF NOT EXISTS recordrad (
     CONSTRAINT fk_recordrad_record
         FOREIGN KEY (record_id)
         REFERENCES record(id)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
