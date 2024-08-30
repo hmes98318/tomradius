@@ -54,7 +54,9 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
                 creator,
                 created_at
             FROM 
-                radcheck;
+                radcheck
+            ORDER BY 
+                created_at DESC;
         `;
 
         if (listType === 2) {

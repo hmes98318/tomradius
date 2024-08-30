@@ -34,7 +34,7 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
             FROM 
                 radpostauth
             ORDER BY 
-                r.authdate DESC;
+                authdate DESC;
         `;
         result = await db.query(query) as RowDataPacket[];
     } catch (error) {
