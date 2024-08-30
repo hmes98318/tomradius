@@ -11,7 +11,7 @@ import { LoadType } from '../@types/Express.types.js';
 import type { Database } from '../lib/database/MySQL.js';
 import type { Logger } from '../lib/logger/Logger.js';
 import type { SessionManager } from '../lib/session-manager/SessionManager.js';
-import type { ApiConfig } from '../@types/Config.types.js';
+import type { AppConfig } from '../@types/Config.types.js';
 import type { EventListeners, Route } from '../@types/Express.types.js';
 
 
@@ -22,7 +22,8 @@ export interface AppEvents {
 
 
 export class App extends EventEmitter implements AppEvents {
-    public config: ApiConfig;
+    public config: AppConfig;
+    public readonly sitePath: string;
 
     #app;                               // Express
     #db: Database;                      // Database
@@ -31,9 +32,10 @@ export class App extends EventEmitter implements AppEvents {
     #logger: Logger;                    // Logger
 
 
-    constructor(config: ApiConfig, db: Database, sessionManager: SessionManager, logger: Logger) {
+    constructor(config: AppConfig, db: Database, sessionManager: SessionManager, logger: Logger) {
         super();
         this.config = config;
+        this.sitePath = config.siteDir;
 
         this.#db = db;
         this.#sessionManager = sessionManager;
@@ -41,6 +43,7 @@ export class App extends EventEmitter implements AppEvents {
 
         this.#app = express();
         this.#setMiddleware();
+        if (config.enableSite) this.#setSite();
     }
 
 
@@ -54,6 +57,13 @@ export class App extends EventEmitter implements AppEvents {
         // this.#app.use(cors());
 
         this.emit('debug', 'Set express middleware succeeded');
+    }
+
+    /**
+     * @private
+     */
+    #setSite(): void {
+        this.#app.use(express.static(this.sitePath));
     }
 
     /**
@@ -169,6 +179,7 @@ export class App extends EventEmitter implements AppEvents {
             }
         }
 
+        this.#app.get('*', (req, res) => res.sendFile(path.join(this.sitePath, 'index.html')));
         this.#app.all('*', this.#handleRouteNotFoundError);
         this.emit('debug', '---------- registering routes finished ----------');
     }

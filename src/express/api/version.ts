@@ -11,13 +11,13 @@ import { LoadType } from '../../@types/Express.types.js';
 
 import type { Request, Response } from 'express';
 import type { Database } from '../../lib/database/MySQL.js';
-import type { ApiConfig } from '../../@types/Config.types.js';
+import type { AppConfig } from '../../@types/Config.types.js';
 import type { ResultData } from '../../@types/Express.types.js';
 
 
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 
-export async function execute(req: Request, res: Response, config: ApiConfig, db: Database): Promise<ResultData> {
+export async function execute(req: Request, res: Response, config: AppConfig, db: Database): Promise<ResultData> {
 
     return {
         loadType: LoadType.SUCCEED,

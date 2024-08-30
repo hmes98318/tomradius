@@ -2,19 +2,23 @@
  * Server config
  */
 export type Config = {
-    apiConfig: ApiConfig;
+    appConfig: AppConfig;
     sessionManager: SessionManagerConfig;
     ipBlocker: IPBlockerConfig
 }
 
 /**
  * api 設置及開關
- * @param {string} host - host (應設置為 localhost)
+ * @param {string} host - host
  * @param {number} port - port
+ * @param {boolean} enableSite - 是否啟用網頁
+ * @param {string} siteDir - 網頁掛載目錄
  */
-export type ApiConfig = {
+export type AppConfig = {
     host: string;
     port: number;
+    enableSite: boolean;
+    siteDir: string;
 }
 
 /**

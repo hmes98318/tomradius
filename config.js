@@ -3,9 +3,11 @@
  * 
  * @type {import("./src/@types/Config.types.js").Config} - config
  * 
- * @param {object} apiConfig - api config
- * @param {string} apiConfig.host - api host
- * @param {number} apiConfig.port - api port
+ * @param {object} appConfig - api config
+ * @param {string} appConfig.host - api host
+ * @param {number} appConfig.port - api port
+ * @param {boolean} appConfig.enableSite - 是否啟用網頁
+ * @param {string} appConfig.siteDir - 網頁掛載目錄
  * 
  * @param {object} SessionManager - SessionManager config
  * @param {number} SessionManager.validTime - Session 的有效時間(ms) (default: 10 minutes)
@@ -17,9 +19,11 @@
  * @param {number} IPBlocker.cleanupInterval - 定時清理器時間(ms) (default: 5 minutes)
  */
 const config = {
-    apiConfig: {
-        host: '127.0.0.1',
-        port: 4000
+    appConfig: {
+        host: '0.0.0.0',
+        port: 4000,
+        enableSite: true,
+        siteDir: `${process.cwd()}/vue-dist`
     },
     sessionManager: {
         validTime: 10 * 60 * 1000,

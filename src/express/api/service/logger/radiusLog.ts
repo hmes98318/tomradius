@@ -19,11 +19,11 @@ import type { RowDataPacket } from 'mysql2/promise';
 import type { Database } from '../../../../lib/database/MySQL.js';
 import type { Logger } from '../../../../lib/logger/Logger.js';
 import type { SessionManager } from '../../../../lib/session-manager/SessionManager.js';
-import type { ApiConfig } from '../../../../@types/Config.types.js';
+import type { AppConfig } from '../../../../@types/Config.types.js';
 import type { ResultData } from '../../../../@types/Express.types.js';
 
 
-export async function execute(req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager, logger: Logger): Promise<ResultData> {
+export async function execute(req: Request, res: Response, config: AppConfig, db: Database, sessionManager: SessionManager, logger: Logger): Promise<ResultData> {
     let result: object[] = [];
 
     // 參數檢查

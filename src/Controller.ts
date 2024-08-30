@@ -26,7 +26,7 @@ export class Controller {
         this.#db = new Database(env.dbConfig);
         this.#logger = new Logger(this.#db);
         this.#sessionManager = new SessionManager(new Authorizer(), this.config.sessionManager, this.config.ipBlocker);
-        this.app = new App(this.config.apiConfig, this.#db, this.#sessionManager, this.#logger);
+        this.app = new App(this.config.appConfig, this.#db, this.#sessionManager, this.#logger);
     }
 
 

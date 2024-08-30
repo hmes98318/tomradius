@@ -4,7 +4,7 @@ import type { Database } from '../lib/database/MySQL.js';
 import type { Logger } from '../lib/logger/Logger.js';
 import type { SessionManager } from '../lib/session-manager/SessionManager.js';
 
-import type { ApiConfig } from './Config.types.js';
+import type { AppConfig } from './Config.types.js';
 
 
 /**
@@ -29,7 +29,7 @@ export interface Route {
     path: string;
     method: string;
     loginRequired: boolean;
-    execute: (req: Request, res: Response, config: ApiConfig, db: Database, sessionManager: SessionManager, logger: Logger) => Promise<void>;
+    execute: (req: Request, res: Response, config: AppConfig, db: Database, sessionManager: SessionManager, logger: Logger) => Promise<void>;
 }
 
 
