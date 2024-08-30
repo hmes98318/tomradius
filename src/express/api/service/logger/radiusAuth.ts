@@ -32,7 +32,9 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
                 END AS is_accepted,
                 authdate
             FROM 
-                radpostauth;
+                radpostauth
+            ORDER BY 
+                r.created_at DESC;
         `;
         result = await db.query(query) as RowDataPacket[];
     } catch (error) {
