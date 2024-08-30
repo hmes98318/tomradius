@@ -95,9 +95,9 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
             `;
         }
 
-        console.log(path, 'query', query);
+        // console.log(path, 'query', query);
         result = await db.query(query) as RowDataPacket[];
-        console.log(path, 'result', result);
+        // console.log(path, 'result', result);
     } catch (error) {
         console.log(path, error);
         return {
