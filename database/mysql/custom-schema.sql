@@ -1,5 +1,5 @@
 /*
-* MySQL 8.0.37-0ubuntu0.22.04.3
+* 10.6.18-MariaDB-0ubuntu0.22.04.1
 * FreeRADIUS Version 3.0.26
 * 
 * rlm_sql - FreeRADIUS SQL Module
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS radacct (
     KEY acctstoptime (acctstoptime),
     KEY nasipaddress (nasipaddress),
     KEY class (class)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS radcheck (
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS radcheck (
     -- END custom columns --
     PRIMARY KEY (id),
     KEY username (username(32))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS radgroupcheck (
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS radgroupcheck (
     value VARCHAR(253) NOT NULL DEFAULT '',
     PRIMARY KEY (id),
     KEY groupname (groupname(32))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS radgroupreply (
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS radgroupreply (
     value VARCHAR(253) NOT NULL DEFAULT '',
     PRIMARY KEY (id),
     KEY groupname (groupname(32))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS radreply (
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS radreply (
     value VARCHAR(253) NOT NULL DEFAULT '',
     PRIMARY KEY (id),
     KEY username (username(32))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS radusergroup (
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS radusergroup (
     priority INT NOT NULL DEFAULT 1,
     PRIMARY KEY (id),
     KEY username (username(32))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS radpostauth (
@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS radpostauth (
     PRIMARY KEY (id),
     KEY username (username),
     KEY class (class)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS nas (
@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS nas (
     description VARCHAR(200) DEFAULT 'RADIUS Client',
     PRIMARY KEY (id),
     KEY nasname (nasname)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 -- Custom Tables --
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS record (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     PRIMARY KEY (id),
     KEY creator (creator)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS recordlogin (
@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS recordlogin (
         REFERENCES record(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS recordrad (
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS recordrad (
         REFERENCES record(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- END custom Tables --
 
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS recordrad (
 -- Custom Stored Procedure --
 DELIMITER //
 
-CREATE PROCEDURE InsertRecord_Login(
+CREATE PROCEDURE InsertRecord_Login (
     IN p_creator VARCHAR(64), 
     IN p_op_type TINYINT UNSIGNED,
     IN p_success BOOLEAN,
@@ -217,7 +217,7 @@ BEGIN
 END //
 
 
-CREATE PROCEDURE InsertRecord_Rad(
+CREATE PROCEDURE InsertRecord_Rad (
     IN p_creator VARCHAR(64), 
     IN p_op_type TINYINT UNSIGNED,
     IN p_success BOOLEAN,

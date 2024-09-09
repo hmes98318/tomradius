@@ -1,15 +1,15 @@
-## 此為 freeradius 的 MySQL 配置文件  
+## 此為 FreeRADIUS 的資料庫配置文件  
 
 ### 環境配置
 ```
 Ubuntu 22.04
-MySQL 8.0.37-0ubuntu0.22.04.3
+10.6.18-MariaDB-0ubuntu0.22.04.1
 FreeRADIUS Version 3.0.26
 ```
 
 
 ### 導入說明
-路徑 `/etc/freeradius/3.0/mods-config/sql/main/mysql`  
+FreeRADIUS 預設資料庫檔案路徑 `/etc/freeradius/3.0/mods-config/sql/main/mysql`  
 
 該路徑下含有的檔案為  
 ```
@@ -19,12 +19,12 @@ schema.sql              // 初始化資料庫架構
 setup.sql               // User 配置
 ```
 
-本專案需導入的配置為 `custom-schema.sql`。   
+本專案使用 **MariaDB** 需導入的配置檔為 `custom-schema.sql`。   
 (使用 `schema.sql` 進行修改添加本專案所需格式)  
 
 
 ### 導入步驟
-創建 MySQL 使用者 (使用以下方法或參考 `setup.sql`)  
+創建 MariaDB 使用者 (使用以下方法或參考 `setup.sql`)  
 ```bash
 mysql> CREATE USER 'radius'@'localhost' IDENTIFIED BY 'your_password';
 mysql> GRANT ALL PRIVILEGES ON radius_db.* TO 'radius'@'localhost';
