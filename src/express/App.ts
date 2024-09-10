@@ -222,7 +222,7 @@ export class App extends EventEmitter implements AppEvents {
             this.#sessionManager.refreshSession(cookieSessionId);
 
             return next();
-        }
+        };
     }
 
     /**

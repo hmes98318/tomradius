@@ -99,6 +99,6 @@ const color = {
 
 const main = async () => {
     await startApp();
-}
+};
 
 main();

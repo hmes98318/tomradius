@@ -5,7 +5,7 @@ import { Logger } from "./lib/logger/Logger.js";
 import { SessionManager } from "./lib/session-manager/SessionManager.js";
 import { loadEnviornment } from "./loader/loadEnviornment.js";
 
-import { config } from "../config.js";
+import { config } from "../config/server.config.js";
 
 import type { Config } from "./@types/Config.types.js";
 

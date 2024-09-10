@@ -67,6 +67,6 @@ const rangeCheck = {
     date: (date: string): true | false => {
         return date === formatDate(date);
     }
-}
+};
 
 export { rangeCheck };

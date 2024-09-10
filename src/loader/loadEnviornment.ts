@@ -32,6 +32,6 @@ const loadEnviornment = (): EnvConfig => {
 
     // console.log('defaultEnv', defaultEnv);
     return defaultEnv;
-}
+};
 
 export { loadEnviornment };
