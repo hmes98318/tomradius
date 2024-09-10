@@ -5,9 +5,10 @@
     "description": "",
     "type": "module",
     "scripts": {
-        "dev": "run-p server:dev vue:dev",
-        "build": "run-s server:build vue:build",
-        "start": "run-s vue:build server:start",
+        "clean": "rm -r dist*/",
+        "dev": "npm run clean; run-p server:dev vue:dev",
+        "build": "npm run clean; run-s server:build vue:build",
+        "start": "npm run clean; run-s vue:build server:start",
         "server:dev": "tsc --noEmit --incremental false && tsx ./src/index.ts",
         "server:build": "tsc",
         "server:start": "npm run server:build && node ./dist/src/index.js",
