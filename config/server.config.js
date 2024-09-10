@@ -1,7 +1,7 @@
 /**
  * 配置檔 (所有值須設置否則會出錯)
  * 
- * @type {import("./src/@types/Config.types.js").Config} - config
+ * @type {import("../src/@types/Config.types.js").Config} - config
  * 
  * @param {object} appConfig - api config
  * @param {string} appConfig.host - api host
@@ -23,7 +23,7 @@ const config = {
         host: '0.0.0.0',
         port: 4000,
         enableSite: true,
-        siteDir: `${process.cwd()}/vue-dist`
+        siteDir: `${process.cwd()}/dist-vue`
     },
     sessionManager: {
         validTime: 10 * 60 * 1000,
