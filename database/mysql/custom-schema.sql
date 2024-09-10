@@ -6,7 +6,7 @@
 * Customized version of schema.sql
 * 
 * To load:
-*   mysql -u root -p radius_db < custom-schema.sql
+*   mariadb -u root -p radius_db < custom-schema.sql
 * 
 */
 

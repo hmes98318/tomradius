@@ -26,17 +26,17 @@ setup.sql               // User 配置
 ### 導入步驟
 創建 MariaDB 使用者 (使用以下方法或參考 `setup.sql`)  
 ```bash
-mysql> CREATE USER 'radius'@'localhost' IDENTIFIED BY 'your_password';
-mysql> GRANT ALL PRIVILEGES ON radius_db.* TO 'radius'@'localhost';
-mysql> FLUSH PRIVILEGES;
+MariaDB> CREATE USER 'radius'@'localhost' IDENTIFIED BY 'your_password';
+MariaDB> GRANT ALL PRIVILEGES ON radius_db.* TO 'radius'@'localhost';
+MariaDB> FLUSH PRIVILEGES;
 ```
 
 創建 Database  
 ```bash
-mysql> CREATE DATABASE radius_db;
+MariaDB> CREATE DATABASE radius_db;
 ```
 
 導入資料庫架構  
 ```bash
-mysql -u root -p radius_db < custom-schema.sql
+mariadb -u root -p radius_db < custom-schema.sql
 ```
