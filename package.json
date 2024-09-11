@@ -7,7 +7,7 @@
     "scripts": {
         "clean": "rm -r dist*/",
         "dev": "npm run clean; run-p server:dev vue:dev",
-        "build": "npm run clean; run-s server:build vue:build",
+        "build": "npm run clean; run-s vue:build server:build",
         "start": "npm run clean; run-s vue:build server:start",
         "server:dev": "tsc --noEmit --incremental false && tsx ./src/index.ts",
         "server:build": "tsc",
