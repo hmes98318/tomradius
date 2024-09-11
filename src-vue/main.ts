@@ -14,6 +14,7 @@ import "bootstrap/dist/js/bootstrap.js";
 // vue 3 ElementPlus 組件引入
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // ElementPlus 中文設定
 import zhTw from 'element-plus/es/locale/lang/zh-tw';
@@ -25,6 +26,11 @@ import { createPinia } from 'pinia';
 const pinia = createPinia();
 
 const app = createApp(App);
+
+// el-icon
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 
 app.use(ElementPlus);
 app.use(ElementPlus, {

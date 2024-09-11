@@ -12,20 +12,26 @@
                 </el-menu-item>
 
                 <!-- Radius manage page -->
-                <el-menu-item index="/radius-manage">⚙️ 授權管理</el-menu-item>
+                <el-menu-item index="/radius-manage">
+                    <el-icon>
+                        <setting style="font-size: 25px; margin-right: 2px;" />
+                    </el-icon>
+                    <span>授權管理</span>
+                </el-menu-item>
 
                 <!-- Logger page -->
-                <el-sub-menu index="4">
-                    <template #title>
-                        <el-icon>
-                            📝
-                        </el-icon>
-                        <span>Log 紀錄</span>
-                    </template>
-                    <el-menu-item index="/logger/login">登入紀錄</el-menu-item>
-                    <el-menu-item index="/logger/auth">授權紀錄</el-menu-item>
-                    <el-menu-item index="/logger/radius">修改紀錄</el-menu-item>
-                </el-sub-menu>
+                <el-menu-item index="/logger/login">
+                    <i class="bi bi-door-open" style="font-size: 25px;margin-right: 6px;"></i>
+                    <span>登入紀錄</span>
+                </el-menu-item>
+                <el-menu-item index="/logger/auth">
+                    <i class="bi bi-fingerprint" style="font-size: 25px;margin-right: 6px;"></i>
+                    <span>授權紀錄</span>
+                </el-menu-item>
+                <el-menu-item index="/logger/radius">
+                    <i class="bi bi-database-fill-gear" style="font-size: 25px;margin-right: 6px;"></i>
+                    <span>修改紀錄</span>
+                </el-menu-item>
             </el-menu>
         </el-aside>
 
@@ -180,35 +186,35 @@ const goBack = () => {
 
 
 <style lang="scss" scoped>
-.layout-container-demo {
-    .el-menu {
-        border-right: none;
-    }
+.el-aside {
+    border-right: #1fa8da 5px solid;
 
-    .el-aside {
-        border-right: #1fa8da 5px solid;
+    li.is-active.el-menu-item:not(.home) {
+        background: #97f0b94b;
+        border: #000 10px solid inset;
+        color: #01A5E0;
+        font-weight: 900;
+        font-size: 16px;
+        position: relative;
+        padding-right: 40px;
 
-        // 同时具有 is-active 和 el-menu-item class 名稱的 li 元素，並且不能包含 home 
-        li.is-active.el-menu-item:not(.home) {
-            background: #97f0b94b;
-            border: #000 10px solid inset;
-            color: #01A5E0;
-            font-weight: 900;
-            font-size: 16px;
-
-            &::before {
-                content: "";
-                display: inline-block;
-                width: 30px;
-                height: 30px;
-                margin-right: 5px;
-                background-image: url('/img/freeradius-bright.svg');
-                /* 確保圖片不被裁切 */
-                background-size: contain;
-                background-repeat: no-repeat;
-                background-position: center;
-            }
-
+        &::after {
+            content: "";
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            /* 絕對定位圖示 */
+            position: absolute;
+            /* 圖示距離右邊的間距 */
+            right: 10px;
+            /* 垂直居中 */
+            top: 50%;
+            /* 修正居中偏移 */
+            transform: translateY(-50%);
+            background-image: url('/img/freeradius-bright.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
     }
 }
