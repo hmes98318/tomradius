@@ -2,16 +2,37 @@
     <div class="contain">
         <div class="col text-center dashboard-card m-2 flex-fill">
             <h4 class="title">已授權裝置數</h4>
-            <div class="fs-2">{{ 100 }} <i class="fs-6">台</i></div>
+            <div class="fs-2">{{ AuthDevData }} <i class="fs-6">台</i></div>
         </div>
     </div>
 </template>
 
 
 <script setup lang="ts">
+import axios from 'axios';
+import { ref, onBeforeMount, computed } from 'vue';
+import { LoadType } from '@/@types/Response.types';
 
 
+const AuthDevData = ref<number>(0);      // 已授權裝置數
 
+const getAuthDevData = async () => {
+    try {
+        const Response = await axios.get('/api/dashboard/authDevices');
+        if (Response.data.loadType === LoadType.SUCCEED) {
+            AuthDevData.value = Response.data.data[0].total_records;
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
+
+onBeforeMount(async () => {
+    await Promise.allSettled([
+        getAuthDevData()
+    ]);
+});
 
 </script>
 
