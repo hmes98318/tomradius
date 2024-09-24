@@ -2,22 +2,22 @@
     "extends": "@vue/tsconfig/tsconfig.dom.json",
     "include": [
         "env.d.ts",
-        "vue-src/**/*",
-        "vue-src/@types/**/*.types.ts",
-        "vue-src/**/*.vue",
-        "vue-src/**/*/*.vue",
-        "vue-src/stores/*",
-        "vue-src/stores/*.ts",
+        "src-vue/**/*",
+        "src-vue/@types/**/*.types.ts",
+        "src-vue/**/*.vue",
+        "src-vue/**/*/*.vue",
+        "src-vue/stores/*",
+        "src-vue/stores/*.ts",
     ],
     "exclude": [
-        "vue-src/**/__tests__/*"
+        "src-vue/**/__tests__/*"
     ],
     "compilerOptions": {
         "composite": true,
         "baseUrl": ".",
         "paths": {
             "@/*": [
-                "./vue-src/*"
+                "./src-vue/*"
             ]
         }
     }
