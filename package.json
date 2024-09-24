@@ -26,6 +26,7 @@
         "axios": "^1.7.7",
         "body-parser": "^1.20.3",
         "bootstrap": "^5.3.3",
+        "chart.js": "^4.4.4",
         "cookie": "^0.6.0",
         "dotenv": "^16.4.5",
         "element-plus": "^2.8.2",
@@ -33,6 +34,7 @@
         "mysql2": "^3.11.1",
         "pinia": "^2.2.2",
         "vue": "^3.5.3",
+        "vue-chartjs": "^5.3.1",
         "vue-router": "^4.4.3"
     },
     "devDependencies": {
