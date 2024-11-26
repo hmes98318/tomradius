@@ -85,9 +85,9 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
             FROM 
                 radcheck
             WHERE
-                id = ${newData.radcheck_id};
+                id = ?;
         `;
-        const getDataResult = await db.query(getDataQuery) as RowDataPacket[];
+        const getDataResult = await db.query(getDataQuery, [newData.radcheck_id]) as RowDataPacket[];
 
         if (getDataResult.length === 0) {
             logger.emit('radcheck', newData.creator, OPType.RAD_DELETE, false, `未找到請求修改的 MAC_ADDRESS (${newData.mac_address})`);
@@ -108,15 +108,14 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
         // 檢查新的 mac_address 是否有衝突(已存在)
         const checkQuery = `
             SELECT EXISTS (
-                SELECT 1 
-                FROM 
-                    radcheck 
-                WHERE 
-                    id != ${newData.radcheck_id} AND
-                    username = "${newData.mac_address}"
+                SELECT 1 FROM radcheck 
+                WHERE id != ? AND username = ?
             ) AS record_exists;
         `;
-        const checkResult = await db.query(checkQuery) as QueryResult[];
+        const checkResult = await db.query(checkQuery, [
+            newData.radcheck_id,
+            newData.mac_address
+        ]) as QueryResult[];
 
         if (!!Number((checkResult[0] as any).record_exists)) {
             logger.emit('radcheck', newData.creator, OPType.RAD_EDIT, false, `添加了已存在的 MAC_ADDRESS (${newData.mac_address})`);
@@ -131,19 +130,29 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
             UPDATE 
                 radcheck
             SET 
-                username = "${newData.mac_address}", 
-                attribute  = "Cleartext-Password", 
-                op = ":=", 
-                value = "${newData.mac_address}", 
-                computer_name = "${newData.computer_name}", 
-                employee_name = "${newData.employee_name}", 
-                description = "${newData.description}", 
-                creator = "${newData.creator}", 
+                username = ?, 
+                attribute  = ?, 
+                op = ?, 
+                value = ?, 
+                computer_name = ?, 
+                employee_name = ?, 
+                description = ?, 
+                creator = ?, 
                 created_at = CURRENT_TIMESTAMP()
             WHERE 
-                id = ${newData.radcheck_id};
+                id = ?;
         `;
-        const result = await db.query(query);
+        const result = await db.query(query, [
+            newData.mac_address,
+            'Cleartext-Password',
+            ':=',
+            newData.mac_address,
+            newData.computer_name,
+            newData.employee_name,
+            newData.description,
+            newData.creator,
+            newData.radcheck_id
+        ]);
         console.log(path, result);
 
     } catch (error) {
@@ -156,10 +165,10 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
 
 
     // 檢查修改了哪些值並寫入 log
-    newData.mac_address = (newData.mac_address === oldData.mac_address ? 'NULL' : `新值(${newData.mac_address}), 舊值(${oldData.mac_address})`);
-    newData.computer_name = (newData.computer_name === oldData.computer_name ? 'NULL' : `新值(${newData.computer_name}), 舊值(${oldData.computer_name})`);
-    newData.employee_name = (newData.employee_name === oldData.employee_name ? 'NULL' : `新值(${newData.employee_name}), 舊值(${oldData.employee_name})`);
-    newData.description = (newData.description === oldData.description ? 'NULL' : `新值(${newData.description}), 舊值(${oldData.description})`);
+    newData.mac_address = (newData.mac_address === oldData.mac_address ? null : `新值(${newData.mac_address}), 舊值(${oldData.mac_address})`);
+    newData.computer_name = (newData.computer_name === oldData.computer_name ? null : `新值(${newData.computer_name}), 舊值(${oldData.computer_name})`);
+    newData.employee_name = (newData.employee_name === oldData.employee_name ? null : `新值(${newData.employee_name}), 舊值(${oldData.employee_name})`);
+    newData.description = (newData.description === oldData.description ? null : `新值(${newData.description}), 舊值(${oldData.description})`);
 
     logger.emit('radcheck', newData.creator, OPType.RAD_EDIT, true, newData.mac_address, newData.computer_name, newData.employee_name, newData.description);
 

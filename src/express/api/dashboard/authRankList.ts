@@ -45,9 +45,9 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
                 username
             ORDER BY 
                 count DESC
-            LIMIT ${count};
+            LIMIT ?;
         `;
-        result = await db.query(query) as RowDataPacket[];
+        result = await db.query(query, [count]) as RowDataPacket[];
     } catch (error) {
         console.log(path, error);
         return {

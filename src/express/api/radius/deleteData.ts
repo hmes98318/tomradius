@@ -53,8 +53,8 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
     let mac_address = '';
 
     try {
-        const checkQuery = `SELECT username FROM radcheck WHERE id = ${radcheck_id};`;
-        const checkResult = await db.query(checkQuery) as RowDataPacket[];
+        const checkQuery = `SELECT username FROM radcheck WHERE id = ?;`;
+        const checkResult = await db.query(checkQuery, [radcheck_id]) as RowDataPacket[];
 
         if (checkResult.length === 0) {
             logger.emit('radcheck', creator, OPType.RAD_DELETE, false, `未找到請求刪除的 MAC_ADDRESS (radcheck_id = ${radcheck_id})`);
@@ -72,8 +72,8 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
         mac_address = checkResult[0].username;
 
 
-        const query = `DELETE FROM radcheck WHERE id = ${radcheck_id};`;
-        await db.query(query);
+        const query = `DELETE FROM radcheck WHERE id = ?;`;
+        await db.query(query, [radcheck_id]);
     } catch (error) {
         console.log(path, error);
         return {

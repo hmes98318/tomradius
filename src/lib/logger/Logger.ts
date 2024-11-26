@@ -55,15 +55,13 @@ export class Logger extends EventEmitter {
                  * IN p_ip VARCHAR(45)
                  * )
                  */
-                const query = `
-                    CALL InsertRecord_Login(
-                        "${user}", 
-                        ${OPType.LOGIN}, 
-                        ${isSuccess ? 'TRUE' : 'FALSE'}, 
-                        "${this.#trimStringLength(ip, 45)}"
-                    );
-                `;
-                await this.#db.query(query);
+                const query = `CALL InsertRecord_Login(?, ?, ?, ?);`;
+                await this.#db.query(query, [
+                    user,
+                    OPType.LOGIN,
+                    isSuccess ? true : false,
+                    this.#trimStringLength(ip, 45)
+                ]);
             } catch (error) {
                 console.log(`Logger "normal-login" event error [user: ${user}, ip: ${ip}]`, error);
                 return false;
@@ -77,19 +75,19 @@ export class Logger extends EventEmitter {
          * @param {string} user - Ubuntu user name (max length 64)
          * @param {OPType} opType - 操作類型 (OPType.RAD_*)
          * @param {boolean} isSuccess - 此次操作紀錄是否成功
-         * @param {string | 'NULL'} macAddress - MAC address 修改描述 (max length 255)
-         * @param {string | 'NULL'} computerName - 電腦名稱修改描述 (max length 255)
-         * @param {string | 'NULL'} employeeName - 員工名稱修改描述 (max length 255)
-         * @param {string | 'NULL'} description - 描述修改描述 (max length 255)
+         * @param {string | null} macAddress - MAC address 修改描述 (max length 255)
+         * @param {string | null} computerName - 電腦名稱修改描述 (max length 255)
+         * @param {string | null} employeeName - 員工名稱修改描述 (max length 255)
+         * @param {string | null} description - 描述修改描述 (max length 255)
          */
         this.on('radcheck', async (
             user: string,
             opType: OPType,
             isSuccess: boolean = false,
-            macAddress: string = 'NULL',
-            computerName: string = 'NULL',
-            employeeName: string = 'NULL',
-            description: string = 'NULL'
+            macAddress: string | null = null,
+            computerName: string | null = null,
+            employeeName: string | null = null,
+            description: string | null = null
         ) => {
             if (
                 (!user || !opType) ||
@@ -112,18 +110,16 @@ export class Logger extends EventEmitter {
                  * IN p_description VARCHAR(255)
                  * )
                  */
-                const query = `
-                    CALL InsertRecord_Rad(
-                        "${user}", 
-                        ${opType}, 
-                        ${isSuccess ? 'TRUE' : 'FALSE'}, 
-                        ${macAddress === 'NULL' ? 'NULL' : `"${this.#trimStringLength(macAddress, 255)}"`}, 
-                        ${computerName === 'NULL' ? 'NULL' : `"${this.#trimStringLength(computerName, 255)}"`}, 
-                        ${employeeName === 'NULL' ? 'NULL' : `"${this.#trimStringLength(employeeName, 255)}"`}, 
-                        ${description === 'NULL' ? 'NULL' : `"${this.#trimStringLength(description, 255)}"`}
-                    );
-                `;
-                await this.#db.query(query);
+                const query = `CALL InsertRecord_Rad(?, ?, ?, ?, ?, ?, ?);`;
+                await this.#db.query(query, [
+                    user,
+                    opType,
+                    isSuccess ? true : false,
+                    macAddress === null ? null : `"${this.#trimStringLength(macAddress, 255)}"`,
+                    computerName === null ? null : `"${this.#trimStringLength(computerName, 255)}"`,
+                    employeeName === null ? null : `"${this.#trimStringLength(employeeName, 255)}"`,
+                    description === null ? null : `"${this.#trimStringLength(description, 255)}"`
+                ]);
             } catch (error) {
                 console.log(`Logger radcheck event error [opType: ${opType}, user: ${user}]`, error);
                 return false;

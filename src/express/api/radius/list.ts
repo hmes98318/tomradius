@@ -43,24 +43,25 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
     const listId = Number(req.query.id);
 
     try {
-        // listType = 1
-        let query = `
-            SELECT 
-                id, 
-                username as mac_address,
-                computer_name,
-                employee_name,
-                description,
-                creator,
-                created_at
-            FROM 
-                radcheck
-            ORDER BY 
-                created_at DESC;
-        `;
-
-        if (listType === 2) {
-            query = `
+        if (listType === 1) {
+            const query = `
+                SELECT 
+                    id, 
+                    username as mac_address,
+                    computer_name,
+                    employee_name,
+                    description,
+                    creator,
+                    created_at
+                FROM 
+                    radcheck
+                ORDER BY 
+                    created_at DESC;
+            `;
+            result = await db.query(query) as RowDataPacket[];
+        }
+        else if (listType === 2) {
+            const query = `
                 SELECT 
                     id, 
                     username as mac_address,
@@ -72,11 +73,11 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
                 FROM 
                     radcheck
                 WHERE
-                    id = ${listId};
+                    id = ?;
             `;
+            result = await db.query(query, [listId]) as RowDataPacket[];
         }
 
-        result = await db.query(query) as RowDataPacket[];
     } catch (error) {
         console.log(path, error);
         return {

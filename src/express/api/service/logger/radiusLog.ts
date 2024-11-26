@@ -52,28 +52,29 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
     const filterEndTime = String(req.body.filter_end_time);
 
     try {
-        // filterType === 1
-        let query = `
-            SELECT 
-                r.id AS record_id, 
-                r.creator, 
-                r.op_type, 
-                r.success, 
-                r.created_at,
-                rrad.mac_address, 
-                rrad.computer_name, 
-                rrad.employee_name, 
-                rrad.description
-            FROM 
-                record r
-            INNER JOIN 
-                recordrad rrad ON r.id = rrad.record_id
-            ORDER BY 
-                r.created_at DESC;
-        `;
-
-        if (filterType === 2) {
-            query = `
+        if (filterType === 1) {
+            const query = `
+                SELECT 
+                    r.id AS record_id, 
+                    r.creator, 
+                    r.op_type, 
+                    r.success, 
+                    r.created_at,
+                    rrad.mac_address, 
+                    rrad.computer_name, 
+                    rrad.employee_name, 
+                    rrad.description
+                FROM 
+                    record r
+                INNER JOIN 
+                    recordrad rrad ON r.id = rrad.record_id
+                ORDER BY 
+                    r.created_at DESC;
+            `;
+            result = await db.query(query) as RowDataPacket[];
+        }
+        else if (filterType === 2) {
+            const query = `
                 SELECT 
                     r.id AS record_id, 
                     r.creator, 
@@ -89,14 +90,13 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
                 INNER JOIN 
                     recordrad rrad ON r.id = rrad.record_id
                 WHERE 
-                    r.created_at BETWEEN FROM_UNIXTIME(${filterStartTime}) AND FROM_UNIXTIME(${filterEndTime})
+                    r.created_at BETWEEN FROM_UNIXTIME(?) AND FROM_UNIXTIME(?)
                 ORDER BY 
                     r.created_at DESC;
             `;
+            result = await db.query(query, [filterStartTime, filterEndTime]) as RowDataPacket[];
         }
 
-        // console.log(path, 'query', query);
-        result = await db.query(query) as RowDataPacket[];
         // console.log(path, 'result', result);
     } catch (error) {
         console.log(path, error);

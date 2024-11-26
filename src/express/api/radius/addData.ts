@@ -70,10 +70,10 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
         // Check if mac_address exist
         const checkQuery = `
             SELECT EXISTS (
-                SELECT 1 FROM radcheck WHERE username = "${newData.mac_address}"
+                SELECT 1 FROM radcheck WHERE username = ?
             ) AS record_exists;
         `;
-        const checkResult = await db.query(checkQuery) as QueryResult[];
+        const checkResult = await db.query(checkQuery, [newData.mac_address]) as QueryResult[];
 
         if (!!Number((checkResult[0] as any).record_exists)) {
             logger.emit('radcheck', newData.creator, OPType.RAD_ADD, false, `添加了已存在的 MAC_ADDRESS (${newData.mac_address})`);
@@ -96,18 +96,18 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
                 description, 
                 creator
             )
-            VALUES (
-                "${newData.mac_address}", 
-                "Cleartext-Password", 
-                ":=", 
-                "${newData.mac_address}", 
-                "${newData.computer_name}", 
-                "${newData.employee_name}", 
-                "${newData.description}", 
-                "${newData.creator}"
-            );
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         `;
-        result = await db.query(query) as ResultSetHeader;
+        result = await db.query(query, [
+            newData.mac_address,
+            'Cleartext-Password',
+            ':=',
+            newData.mac_address,
+            newData.computer_name,
+            newData.employee_name,
+            newData.description,
+            newData.creator
+        ]) as ResultSetHeader;
         console.log(path, result);
 
     } catch (error) {

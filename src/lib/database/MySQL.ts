@@ -34,11 +34,11 @@ export class Database {
      * @throws - If there is an error executing the query, an error is thrown.
      * @returns {Promise<mysql.QueryResult>} - A promise that resolves with an array of rows matching the query.
      */
-    public async query(sql: string): Promise<mysql.QueryResult> {
+    public async query(sql: string, value: any = null): Promise<mysql.QueryResult> {
         let conn;
         try {
             conn = await this.#getConnection();
-            const [rows, fields] = await conn.query(sql);
+            const [rows, fields] = await conn.query(sql, value);
             return rows;
         }
         catch (error) {

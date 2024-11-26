@@ -40,13 +40,13 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
             FROM 
                 radpostauth
             WHERE 
-                authdate >= CURDATE() - INTERVAL ${days} DAY
+                authdate >= CURDATE() - INTERVAL ? DAY
             GROUP BY 
                 DATE(authdate)
             ORDER BY 
                 DATE(authdate) DESC;
         `;
-        result = await db.query(query) as RowDataPacket[];
+        result = await db.query(query, [days]) as RowDataPacket[];
     } catch (error) {
         console.log(path, error);
         return {
