@@ -48,4 +48,13 @@ const formatDate = (date: string | number | Date | null) => {
     return [year, month, day].join('-');
 };
 
-export { convertUTCtoLocal, formatDate };
+/**
+ * 檢查日期字串是否符合 YYYY-MM-DD 格式
+ * @param {string} dateString - 要檢查的日期字串
+ * @returns {boolean}
+ */
+const isValidDateString = (dateString: string): boolean => {
+    return (/^\d{4}-\d{2}-\d{2}$/).test(dateString);
+}
+
+export { convertUTCtoLocal, formatDate, isValidDateString };
