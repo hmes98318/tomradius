@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import https from 'https';
 import { fileURLToPath } from 'url';
 import { EventEmitter } from 'events';
 
@@ -70,9 +71,21 @@ export class App extends EventEmitter implements AppEvents {
      * start express framework
      */
     public startListening(): void {
-        this.#app.listen(this.config.port, this.config.host, () => {
-            this.emit('debug', `Server listening on http://${this.config.host}:${this.config.port}`);
-        });
+        if (this.config.enableHttps) {
+            const sslOptions = {
+                key: fs.readFileSync(path.resolve(this.config.sslKeyPath)),
+                cert: fs.readFileSync(path.resolve(this.config.sslCertPath))
+            };
+
+            https.createServer(sslOptions, this.#app).listen(this.config.port, this.config.host, () => {
+                this.emit('debug', `Server listening on https://${this.config.host}:${this.config.port}`);
+            });
+        }
+        else {
+            this.#app.listen(this.config.port, this.config.host, () => {
+                this.emit('debug', `Server listening on http://${this.config.host}:${this.config.port}`);
+            });
+        }
     }
 
     /**

@@ -13,12 +13,19 @@ export type Config = {
  * @param {number} port - port
  * @param {boolean} enableSite - 是否啟用網頁
  * @param {string} siteDir - 網頁掛載目錄
+ * @param {boolean} enableHttps - 是否啟用 HTTPS
+ * @param {string} siteDir - 網頁掛載目錄
+ * @param {string} sslKeyPath - SSL key 路徑
+ * @param {string} sslCertPath - SSL cert 路徑
  */
 export type AppConfig = {
     host: string;
     port: number;
     enableSite: boolean;
     siteDir: string;
+    enableHttps: boolean;
+    sslKeyPath: string;
+    sslCertPath: string;
 }
 
 /**

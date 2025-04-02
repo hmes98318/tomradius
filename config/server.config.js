@@ -8,6 +8,10 @@
  * @param {number} appConfig.port - api port
  * @param {boolean} appConfig.enableSite - 是否啟用網頁
  * @param {string} appConfig.siteDir - 網頁掛載目錄
+ * @param {boolean} appConfig.enableHttps - 是否啟用 HTTPS
+ * @param {string} appConfig.siteDir - 網頁掛載目錄
+ * @param {string} appConfig.sslKeyPath - SSL key 路徑
+ * @param {string} appConfig.sslCertPath - SSL cert 路徑
  * 
  * @param {object} SessionManager - SessionManager config
  * @param {number} SessionManager.validTime - Session 的有效時間(ms) (default: 10 minutes)
@@ -21,9 +25,12 @@
 const config = {
     appConfig: {
         host: '0.0.0.0',
-        port: 4000,
+        port: 443,
         enableSite: true,
-        siteDir: `${process.cwd()}/dist-vue`
+        siteDir: `${process.cwd()}/dist-vue`,
+        enableHttps: true,
+        sslKeyPath: `${process.cwd()}/ssl/radius.key`,
+        sslCertPath: `${process.cwd()}/ssl/radius.crt`
     },
     sessionManager: {
         validTime: 10 * 60 * 1000,
