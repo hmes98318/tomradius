@@ -99,7 +99,7 @@ import DeleteRadiusData from '@/components/manage/data/delete/DeleteRadiusData.v
 import { Success } from '@/components/notification/DataNotification.js';
 
 import { changeLogState } from '@/stores/isLogin';
-import { convertUTCtoLocal } from '@/components/util/convertUTCtoLocal';
+import { convertUTCtoLocal } from '@/components/util/formatDate';
 import { normalizeMacAddress } from '@/components/util/normalizeMacAddress';
 import { LoadType } from '@/@types/Response.types';
 

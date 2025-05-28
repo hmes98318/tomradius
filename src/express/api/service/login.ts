@@ -49,7 +49,7 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
 
 
     const cookies = cookie.parse(req.headers.cookie as string || '');
-    const cookieSessionId = cookies.sessionId;
+    const cookieSessionId = cookies.sessionId || '';
 
     // 已登入的狀態跳過登入 (存在 sessionId)
     if (sessionManager.checkSession(cookieSessionId)) {

@@ -18,7 +18,7 @@ const convertUTCtoLocal = (utcDateString: string): string => {
     });
 
     // 'YYYY/MM/DD HH:mm:ss' -> 'YYYY-MM-DD HH:mm:ss'
-    const formattedDate = localDateString.replaceAll('/', '-');
+    const formattedDate = localDateString.replace(/\//g, '-');
 
     return formattedDate;
 };

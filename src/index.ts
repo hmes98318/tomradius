@@ -12,7 +12,7 @@ const startApp = async () => {
     controller.app?.on('request', (req: any) => {
         const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.ip;
 
-        if (Object.keys(req.body).length === 0) {
+        if (req.body && Object.keys(req.body).length === 0) {
             console.log(getFormatTime(), '[api][request]', ip, req.url);
         }
         else {

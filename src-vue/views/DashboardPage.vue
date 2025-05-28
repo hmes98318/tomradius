@@ -47,7 +47,7 @@ import {
     PointElement
 } from 'chart.js';
 
-import { convertUTCtoLocal } from '@/components/util/convertUTCtoLocal';
+import { convertUTCtoLocal } from '@/components/util/formatDate';
 import { formatDate } from '@/components/util/formatDate';
 import { LoadType } from '@/@types/Response.types';
 

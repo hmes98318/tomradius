@@ -70,7 +70,7 @@ import axios from 'axios';
 import { ref, onMounted, computed, reactive } from 'vue';
 
 import { changeLogState } from '@/stores/isLogin';
-import { convertUTCtoLocal } from '@/components/util/convertUTCtoLocal';
+import { convertUTCtoLocal } from '@/components/util/formatDate';
 import { isValidDateString } from '@/components/util/formatDate';
 import { LoadType } from '@/@types/Response.types';
 

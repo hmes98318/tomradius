@@ -23,7 +23,7 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
      * 從 cookie.sessionId 獲取使用者
      */
     const cookies = cookie.parse(req.headers.cookie as string || '');
-    const cookieSessionId = cookies.sessionId;
+    const cookieSessionId = cookies.sessionId || '';
     const sessionData = sessionManager.getSession(cookieSessionId);
 
     if (!sessionData) {
