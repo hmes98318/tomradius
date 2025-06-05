@@ -38,16 +38,21 @@
         "vue-router": "^4.5.1"
     },
     "devDependencies": {
+        "@eslint/js": "^9.28.0",
         "@tsconfig/node22": "^22.0.2",
         "@types/cookie": "^1.0.0",
         "@types/express": "^4.17.21",
         "@types/node": "^22.15.23",
         "@vitejs/plugin-vue": "^5.2.4",
         "@vue/tsconfig": "^0.7.0",
+        "eslint": "^9.28.0",
+        "eslint-plugin-vue": "^10.1.0",
+        "globals": "^16.2.0",
         "npm-run-all2": "^8.0.4",
         "sass": "^1.89.0",
         "tsx": "^4.19.4",
         "typescript": "~5.8.3",
+        "typescript-eslint": "^8.33.1",
         "vite": "^6.3.5",
         "vue-tsc": "^2.1.6"
     },
