@@ -12,7 +12,7 @@ import type { Config } from "./@types/Config.types.js";
 
 export class Controller {
     public config: Config;
-    public app?: App;
+    public app: App;
 
     #db: Database;
     #logger: Logger;
@@ -33,8 +33,8 @@ export class Controller {
     /**
      * Start express framework
      */
-    public async initializeExpress(): Promise<void> {
-        await this.app?.setRoutes();
-        this.app?.startListening();
+    public async initExpress(): Promise<void> {
+        await this.app.setRoutes();
+        this.app.startListening();
     }
 }

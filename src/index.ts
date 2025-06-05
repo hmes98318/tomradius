@@ -5,39 +5,49 @@ const controller = new Controller();
 
 
 const startApp = async () => {
-    controller.app?.on('debug', (msg: any) => {
+    controller.app.on('debug', (msg: any) => {
         console.log(getFormatTime(), '[api][debug]', msg);
     });
-
-    controller.app?.on('request', (req: any) => {
+    controller.app.on('request', (req: any) => {
         const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.ip;
 
-        if (req.body && Object.keys(req.body).length === 0) {
-            console.log(getFormatTime(), '[api][request]', ip, req.url);
+        if (req.body && Object.keys(req.body).length > 0) {
+            if (req.url === '/api/service/login') {
+                const sanitizedBody = { ...req.body };
+                if (sanitizedBody.password) {
+                    sanitizedBody.password = '*****';
+                }
+
+                console.log(getFormatTime(), '[api][request]', ip, req.url, sanitizedBody);
+                return;
+            }
+
+
+            console.log(getFormatTime(), '[api][request]', ip, req.url, req.body);
         }
         else {
-            console.log(getFormatTime(), '[api][request]', ip, req.url, req.body);
+            console.log(getFormatTime(), '[api][request]', ip, req.url);
         }
     });
 
-    controller.app?.on('requestFail', (ip: string, failType: 'UNAUTHORIZED' | 'FORBIDDEN', path: string) => {
+    controller.app.on('requestFail', (ip: string, failType: 'UNAUTHORIZED' | 'FORBIDDEN', path: string) => {
         console.log(getFormatTime(), '[api][requestFail]', ip, failType, path);
     });
 
-    controller.app?.on('response', (res: any) => {
+    controller.app.on('response', (res: any) => {
         //console.log(getFormatTime(),'[api][response]', res);
     });
 
-    controller.app?.on('error', (msg: any) => {
+    controller.app.on('error', (msg: any) => {
         console.log(getFormatTime(), color.red, msg, color.white);
     });
 
-    controller.app?.on('warn', (msg: any) => {
+    controller.app.on('warn', (msg: any) => {
         console.log(getFormatTime(), color.yellow, msg, color.white);
     });
 
 
-    await controller.initializeExpress();
+    await controller.initExpress();
 };
 
 

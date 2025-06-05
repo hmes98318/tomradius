@@ -2,8 +2,12 @@
  * 獲取 radius 授權紀錄
  * 
  * 參數:
- * startDate? (string)      開始日期 (YYYY-MM-DD)
- * endDate? (string)        結束日期 (YYYY-MM-DD)
+ * limit? (number | 'ALL')      獲取數量 (default: 50)
+ * before? (number)             只獲取 id 小於指定值的記錄
+ * 
+ * 過濾參數:
+ * start_date? (string)          開始日期 (YYYY-MM-DD)
+ * end_date? (string)            結束日期 (YYYY-MM-DD)
  */
 export const path = '/api/service/logger/radiusAuth';
 export const method = 'GET';
@@ -22,26 +26,17 @@ import type { ResultData } from '../../../../@types/Express.types.js';
 
 export async function execute(req: Request, res: Response, config: AppConfig, db: Database): Promise<ResultData> {
     let result: object[] = [];
-    const { startDate, endDate } = req.query;
+    let isAll = false;
 
-    if (
-        startDate && typeof startDate !== 'string' ||
-        endDate && typeof endDate !== 'string' ||
-        startDate && typeof startDate === 'string' && !isValidDateString(startDate) ||
-        endDate && typeof endDate === 'string' && !isValidDateString(endDate)
-    ) {
-        return {
-            loadType: LoadType.PARAMETER_ERROR,
-            data: []
-        };
+    if (String(req.query.limit).toUpperCase() === 'ALL') {
+        isAll = true;
     }
 
+    const limit = isAll ? null : Math.max(parseInt(req.query.limit as string) || 50, 1);
+    const before = parseInt(req.query.before as string) || null;
 
     try {
-        const start = startDate ? `${startDate} 00:00:00` : (new Date().toISOString().slice(0, 10) + ' 00:00:00');
-        const end = endDate ? `${endDate} 23:59:59` : (new Date().toISOString().slice(0, 10) + ' 23:59:59');
-
-        const query = `
+        let query = `
             SELECT 
                 id,
                 username as mac_address,
@@ -53,12 +48,50 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
             FROM 
                 radpostauth
             WHERE 
-                authdate BETWEEN ? AND ?
-            ORDER BY 
-                authdate DESC;
+                1=1
         `;
 
-        result = await db.query(query, [start, end]) as RowDataPacket[];
+        const params: any[] = [];
+
+
+        // 如果有 before 參數，則只獲取 id 小於 before 的資料
+        if (before) {
+            query += ` AND id < ?`;
+            params.push(before);
+        }
+
+        // ---------------------------------------------------------------------
+        // 過濾參數處理：
+
+        // 日期過濾 (YYYY-MM-DD)
+        if (
+            req.query.start_date && req.query.end_date &&
+            isValidDateString(req.query.start_date as string) &&
+            isValidDateString(req.query.end_date as string)
+        ) {
+            const startDate = req.query.start_date as string;
+            const endDate = req.query.end_date as string;
+
+            const start = `${startDate} 00:00:00`;
+            const end = `${endDate} 23:59:59`;
+            query += ` AND authdate BETWEEN ? AND ?`;
+            params.push(start, end);
+        }
+
+        // ---------------------------------------------------------------------
+
+
+        query += ` ORDER BY id ASC`;
+
+        if (!isAll) {
+            query += ` LIMIT ?;`;
+            params.push(limit);
+        }
+        else {
+            query += ';';
+        }
+
+        result = await db.query(query, params) as RowDataPacket[];
     } catch (error) {
         console.log(path, error);
         return {
@@ -66,7 +99,6 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
             data: []
         };
     }
-
 
     return {
         loadType: LoadType.SUCCEED,
