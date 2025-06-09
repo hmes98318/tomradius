@@ -29,6 +29,7 @@
         "chart.js": "^4.4.9",
         "cookie": "^1.0.2",
         "dotenv": "^16.5.0",
+        "el-table-infinite-scroll": "^3.0.6",
         "element-plus": "^2.9.11",
         "express": "^4.21.2",
         "mysql2": "^3.14.1",
