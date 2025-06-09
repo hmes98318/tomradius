@@ -5,11 +5,11 @@ import { ref } from 'vue';
 export const changeLogState = defineStore('logState', () => {
     const isLogin = ref(false);
 
-    function Login() {
+    function piniaLogin() {
         isLogin.value = true;
         console.log(`[console](isLogin.ts) pinia 內部 isLogin: ${isLogin.value} %c登入成功 !`,'color: #a5df95;');
     }
-    function LogOut() {
+    function piniaLogout() {
         isLogin.value = false;
         console.log(`[console](isLogin.ts) pinia 內部 isLogin: ${isLogin.value} %c登出成功 !`,'color: #df9596;');
         deleteSessionCookie();
@@ -38,5 +38,5 @@ export const changeLogState = defineStore('logState', () => {
         
     };
 
-    return { isLogin, Login, LogOut, deleteSessionCookie };
+    return { isLogin, piniaLogin, piniaLogout, deleteSessionCookie };
 });

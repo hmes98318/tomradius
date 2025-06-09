@@ -1,5 +1,4 @@
 <template>
-    <!-- elementPlus 中文全域化設定 -->
     <el-config-provider :locale="locale">
         <HomePage v-if="isLogin"></HomePage>
         <LoginPage v-else></LoginPage>
@@ -37,9 +36,8 @@ onMounted(async () => {
     await checkLoginState();
 });
 
-// pinia
 const store = changeLogState();
-const { Login, LogOut } = store;
+const { piniaLogin, piniaLogout } = store;
 const { isLogin } = storeToRefs(store);
 
 /**
@@ -56,23 +54,23 @@ const checkLoginState = async () => {
 
             // 顯示 homepage (登入成功，並且 sessionID 尚未過期)
             if (statusResponse.data.loadType === LoadType.SUCCEED) {
-                Login();
+                piniaLogin();
             }
             else {
                 // sessionId 過期, 清除 cookie 的 sessionId
                 deleteSessionCookie();
-                LogOut();
+                piniaLogout();
                 router.push('/login');
             }
         } catch (error) {
             // API 掛了才會跳此錯誤
             deleteSessionCookie();
-            LogOut();
+            piniaLogout();
             router.push('/login');
         }
     }
     else {
-        LogOut();
+        piniaLogout();
         router.push('/login');
     }
     console.log(`是否登入 : ${isLogin.value}`);

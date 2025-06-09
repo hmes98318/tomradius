@@ -14,7 +14,8 @@ import "bootstrap/dist/js/bootstrap.js";
 // vue 3 ElementPlus 組件引入
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue';
+import ElTableInfiniteScroll from "el-table-infinite-scroll";
 
 // ElementPlus 中文設定
 import zhTw from 'element-plus/es/locale/lang/zh-tw';
@@ -33,9 +34,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app.use(ElementPlus);
-app.use(ElementPlus, {
-    locale: zhTw,
-});
+app.use(ElementPlus, { locale: zhTw });
+app.use(ElTableInfiniteScroll);
 
 app.use(router);
 app.use(pinia);
