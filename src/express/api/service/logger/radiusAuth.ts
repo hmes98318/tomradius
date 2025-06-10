@@ -81,7 +81,7 @@ export async function execute(req: Request, res: Response, config: AppConfig, db
         // ---------------------------------------------------------------------
 
 
-        query += ` ORDER BY id ASC`;
+        query += ` ORDER BY id DESC`;
 
         if (!isAll) {
             query += ` LIMIT ?;`;
