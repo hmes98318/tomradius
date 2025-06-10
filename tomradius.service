@@ -1,0 +1,18 @@
+[Unit]
+Description=FreeRADIUS Web Management App
+After=network.target
+
+[Service]
+WorkingDirectory=/home/radweb/tomradius
+
+User=radweb
+Group=radweb
+
+Environment=NODE_VERSION=22.16.0
+Environment=DB_HOST=localhost DB_PORT=3306 DB_DATABASE=radius_db DB_USER=radius DB_PASSWORD=radius_password
+
+ExecStart=/home/radweb/.nvm/nvm-exec npm run start
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
