@@ -202,7 +202,8 @@ const handleMacInput = (value: string) => {
     if (!value) return;
 
     // 移除所有非十六進制字符
-    let mac = value.replace(/[^0-9A-Fa-f]/g, '');
+    // let mac = value.replace(/[^0-9A-Fa-f]/g, '');
+    let mac = value;
 
     // 插入冒號
     let formattedMac = '';
