@@ -206,15 +206,15 @@ const handleMacInput = (value: string) => {
     let mac = value;
 
     // 插入冒號
-    let formattedMac = '';
-    for (let i = 0; i < mac.length && i < 12; i++) {
-        if (i > 0 && i % 2 === 0 && formattedMac.length < 17) {
-            formattedMac += ':';
-        }
-        formattedMac += mac[i];
-    }
+    // let formattedMac = '';
+    // for (let i = 0; i < mac.length && i < 12; i++) {
+    //     if (i > 0 && i % 2 === 0 && formattedMac.length < 17) {
+    //         formattedMac += ':';
+    //     }
+    //     formattedMac += mac[i];
+    // }
 
-    curData.value.mac_address = formattedMac.toUpperCase();
+    curData.value.mac_address = mac.toUpperCase();
 };
 
 /**
