@@ -105,6 +105,8 @@ systemctl restart freeradius.service
 
 
 ## 網頁管理平台配置
+node.js 環境使用 nvm 配置。  
+
 安裝 npm 模組  
 ```bash
 npm ci
@@ -126,14 +128,32 @@ npm run start
 ```
 
 
+## 端口綁定
+在 Ubuntu 中，非 root 用戶無法綁定 1024 以下的特權端口。若需要使用 80、443 等標準端口，可以通過以下方式授權而無需使用 root 運行。  
+
+```bash
+sudo setcap 'cap_net_bind_service=+ep' /home/radweb/.nvm/versions/node/v22.16.0/bin/node
+```
+
+確認權限是否已正確設置
+```bash
+sudo getcap /home/radweb/.nvm/versions/node/v22.16.0/bin/node
+```
+
+移除綁定低端口權限的命令  
+```bash
+sudo setcap -r /home/radweb/.nvm/versions/node/v22.16.0/bin/node
+```
+
+
 ## 使用 systemd 掛載服務
 
 建立 systemd 配置檔  
 ```bash
-vim /etc/systemd/system/tomradius.service
+sudo vim /etc/systemd/system/tomradius.service
 ```
 
-參考 `tomradius.service` 修改配置，node.js 環境使用 nvm 配置  
+參考 `tomradius.service` 修改配置  
 ```conf
 [Unit]
 Description=FreeRADIUS Web Management App
@@ -157,15 +177,15 @@ WantedBy=multi-user.target
 
 設定檔案權限  
 ```bash
-chmod 644 /etc/systemd/system/tomradius.service
+sudo chmod 644 /etc/systemd/system/tomradius.service
 ```
 
 重新載入 systemd 配置  
 ```bash
-systemctl daemon-reload
+sudo systemctl daemon-reload
 ```
 
 啟動服務  
 ```bash
-systemctl enable --now tomradius.service
+sudo systemctl enable --now tomradius.service
 ```
