@@ -13,7 +13,7 @@
 * Ubuntu 22.04
 * 10.6.18-MariaDB-0ubuntu0.22.04.1
 * FreeRADIUS V3.0.26
-* Node.js v20.16.0
+* Node.js v22.16.0
 
 
 ## 環境配置
@@ -125,3 +125,47 @@ DB_PASSWORD = "password"
 npm run start
 ```
 
+
+## 使用 systemd 掛載服務
+
+建立 systemd 配置檔  
+```bash
+vim /etc/systemd/system/tomradius.service
+```
+
+參考 `tomradius.service` 修改配置，node.js 環境使用 nvm 配置  
+```conf
+[Unit]
+Description=FreeRADIUS Web Management App
+After=network.target
+
+[Service]
+WorkingDirectory=/home/radweb/tomradius
+
+User=radweb
+Group=radweb
+
+Environment=NODE_VERSION=22.16.0
+Environment=DB_HOST=localhost DB_PORT=3306 DB_DATABASE=radius_db DB_USER=radius DB_PASSWORD=radius_password
+
+ExecStart=/home/radweb/.nvm/nvm-exec npm run start
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+設定檔案權限  
+```bash
+chmod 644 /etc/systemd/system/tomradius.service
+```
+
+重新載入 systemd 配置  
+```bash
+systemctl daemon-reload
+```
+
+啟動服務  
+```bash
+systemctl enable --now tomradius.service
+```
