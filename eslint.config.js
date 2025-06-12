@@ -33,11 +33,31 @@ export default defineConfig([
         languageOptions: { parserOptions: { parser: tseslint.parser } }
     },
     {
+        ignores: ["**/*.types.ts"],
         rules: {
-            'no-unused-vars': "warn",
+            'no-unused-vars': ["warn", {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "destructuredArrayIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }],
+            "@typescript-eslint/no-unused-vars": ["warn", {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "destructuredArrayIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }],
+            "@typescript-eslint/no-explicit-any": "off",
             "vue/no-unused-vars": "off",
             "vue/require-v-for-key": "off",
             "semi": ["error", "always"]
         }
     },
+    // enum types
+    {
+        files: ["**/*.types.ts"],
+        rules: {
+            "@typescript-eslint/no-unused-vars": "off"
+        }
+    }
 ]);

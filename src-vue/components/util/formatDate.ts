@@ -25,18 +25,18 @@ const convertUTCtoLocal = (utcDateString: string): string => {
 
 /**
  * 把時間統一格式化成 YYYY-MM-DD (DATE 格式)
- * @param date - 時間格式
- * @returns - YYYY-MM-DD
+ * @param {string} date - 時間格式
+ * @returns {string | null} - YYYY-MM-DD
  */
-const formatDate = (date: string | number | Date | null) => {
+const formatDate = (date: string | number | Date | null): string | null => {
     if (date === null) {
         return null;
     }
 
-    let d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate();
+    const year = d.getFullYear();
 
     if (month.length < 2) {
         month = '0' + month;
@@ -55,6 +55,6 @@ const formatDate = (date: string | number | Date | null) => {
  */
 const isValidDateString = (dateString: string): boolean => {
     return (/^\d{4}-\d{2}-\d{2}$/).test(dateString);
-}
+};
 
 export { convertUTCtoLocal, formatDate, isValidDateString };

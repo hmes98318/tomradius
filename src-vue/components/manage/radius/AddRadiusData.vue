@@ -168,8 +168,13 @@ const handleMacPaste = (event: ClipboardEvent) => {
     // 阻止默認貼上行為
     event.preventDefault();
 
-    // 獲取剪貼板的文本
-    const clipboardData = event.clipboardData || (window as any).clipboardData;
+    // 獲取剪貼簿的文本
+    const clipboardData = event.clipboardData;
+    if (!clipboardData) {
+        console.warn('Clipboard data not available');
+        return;
+    }
+
     const pastedText = clipboardData.getData('text');
 
     // 清理 MAC 地址並格式化

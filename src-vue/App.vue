@@ -62,7 +62,7 @@ const checkLoginState = async () => {
                 piniaLogout();
                 router.push('/login');
             }
-        } catch (error) {
+        } catch (_) {
             // API 掛了才會跳此錯誤
             deleteSessionCookie();
             piniaLogout();

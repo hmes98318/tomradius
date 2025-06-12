@@ -3,7 +3,7 @@
  */
 export interface ResultData {
     loadType: LoadType;
-    data: Object[];
+    data: object[];
 }
 
 
