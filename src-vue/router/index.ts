@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-/* Dashboard 頁面           |-> */  import DashboardPage from '@/views/DashboardPage.vue';
-/* Radius 授權管理頁面      |-> */  import RadiusManagePage from '@/views/RadiusManagePage.vue';
-/* 登入頁面                 |-> */  import LoginPage from '@/views/user/LoginPage.vue';
-/* MAC 驗證紀錄頁面         |-> */  import AuthLoggerPage from '@/views/logger/AuthLoggerPage.vue';
-/* 登入紀錄頁面             |-> */  import LoginLoggerPage from '@/views/logger/LoginLoggerPage.vue';
-/* Radius 紀錄頁面          |-> */  import RadiusLoggerPage from '@/views/logger/RadiusLoggerPage.vue';
+import AuthLoggerPage from '@/views/logger/AuthLoggerPage.vue';
+import DashboardPage from '@/views/DashboardPage.vue';
+import LoginLoggerPage from '@/views/logger/LoginLoggerPage.vue';
+import LoginPage from '@/views/user/LoginPage.vue';
+import RadiusLoggerPage from '@/views/logger/RadiusLoggerPage.vue';
+import RadiusManagePage from '@/views/RadiusManagePage.vue';
 
 import NullPage from '@/views/NullPage.vue';
 

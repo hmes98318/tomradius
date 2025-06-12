@@ -10,7 +10,7 @@ export enum OPType {
 
 
 /**
- * Radius 裝置授權紀錄資料類型
+ * Radius 裝置驗證紀錄資料類型
  */
 export type AuthLoggerData = {
     id: number;

@@ -46,7 +46,7 @@
                         <el-icon>
                             <Histogram />
                         </el-icon>
-                        <span>總授權次數</span>
+                        <span>總驗證次數</span>
                     </div>
                 </template>
                 <div class="stat-value-container">
@@ -58,14 +58,14 @@
 
         <!-- 圖表與排行榜區域 -->
         <div class="charts-row">
-            <!-- 授權趨勢圖 -->
+            <!-- 驗證趨勢圖 -->
             <el-card class="chart-card trend-chart">
                 <template #header>
                     <div class="card-header">
                         <el-icon>
                             <TrendCharts />
                         </el-icon>
-                        <span>授權趨勢 (近7天)</span>
+                        <span>驗證趨勢 (近7天)</span>
                         <div class="header-actions">
                             <el-button size="small" circle @click="refreshData">
                                 <el-icon>
@@ -87,9 +87,9 @@
                         <el-icon>
                             <List />
                         </el-icon>
-                        <span>今日裝置授權排行</span>
+                        <span>今日裝置驗證排行</span>
                         <div class="header-actions">
-                            <el-tooltip content="僅顯示今日授權資料" placement="top">
+                            <el-tooltip content="僅顯示今日驗證資料" placement="top">
                                 <el-icon>
                                     <InfoFilled />
                                 </el-icon>
@@ -98,7 +98,7 @@
                     </div>
                 </template>
                 <div class="rank-list-container">
-                    <el-empty v-if="authRankListData.length === 0" description="今日尚無授權資料" />
+                    <el-empty v-if="authRankListData.length === 0" description="今日尚無驗證資料" />
                     <ul v-else class="rank-list-items">
                         <li v-for="(item, index) in authRankListData" :key="index" class="rank-item"
                             :class="{ 'success': item.is_success, 'failure': !item.is_success }">
@@ -122,14 +122,14 @@
             </el-card>
         </div>
 
-        <!-- 最近授權活動卡片 -->
+        <!-- 最近驗證活動卡片 -->
         <el-card class="activity-card">
             <template #header>
                 <div class="card-header">
                     <el-icon>
                         <Clock />
                     </el-icon>
-                    <span>最近授權活動</span>
+                    <span>最近驗證活動</span>
                 </div>
             </template>
             <div class="activity-timeline">
@@ -142,12 +142,12 @@
                             <span class="activity-time">{{ activity.time }}</span>
                             <span class="activity-status"
                                 :class="{ 'success': activity.success, 'failure': !activity.success }">
-                                {{ activity.success ? '授權成功' : '授權失敗' }}
+                                {{ activity.success ? '驗證成功' : '驗證失敗' }}
                             </span>
                         </div>
                     </el-timeline-item>
                 </el-timeline>
-                <el-empty v-else description="暫無授權活動記錄" :image-size="100" />
+                <el-empty v-else description="暫無驗證活動記錄" :image-size="100" />
             </div>
         </el-card>
     </el-main>
@@ -189,7 +189,7 @@ import type { ChartOptions } from 'chart.js';
 
 
 /**
- * 授權成功失敗數資料類型
+ * 驗證成功失敗數資料類型
  */
 type AuthCountData = {
     date: string;
@@ -198,7 +198,7 @@ type AuthCountData = {
 }
 
 /**
- * 授權排行資料類型
+ * 驗證排行資料類型
  */
 type AuthRankList = {
     device: string;
@@ -207,7 +207,7 @@ type AuthRankList = {
 }
 
 /**
- * 最近授權活動資料類型
+ * 最近驗證活動資料類型
  */
 type RecentActivity = {
     device: string;
@@ -272,7 +272,7 @@ const getAuthDevData = async () => {
 };
 
 /**
- * 獲取最近幾天授權成功失敗數
+ * 獲取最近幾天驗證成功失敗數
  */
 const getAuthCountData = async (days: number) => {
     try {
@@ -292,7 +292,7 @@ const getAuthCountData = async (days: number) => {
 };
 
 /**
- * 獲取當天授權數排行
+ * 獲取當天驗證數排行
  */
 const getAuthRankListData = async (count: number) => {
     try {
@@ -309,7 +309,7 @@ const getAuthRankListData = async (count: number) => {
 };
 
 /**
- * 獲取最近授權活動
+ * 獲取最近驗證活動
  */
 const getRecentActivities = async (count: number) => {
     try {
@@ -346,7 +346,7 @@ const successRate = computed(() => {
     return total > 0 ? Math.round((totalSuccess / total) * 100) : 0;
 });
 
-// 計算總授權次數
+// 計算總驗證次數
 const totalAuths = computed(() => {
     return authCountData.value.reduce((sum, item) => sum + item.success + item.fail, 0);
 });
@@ -361,7 +361,7 @@ const chartData = computed(() => {
         labels,
         datasets: [
             {
-                label: '授權成功',
+                label: '驗證成功',
                 backgroundColor: 'rgba(103, 194, 58, 0.2)',
                 borderColor: '#67C23A',
                 pointBackgroundColor: '#67C23A',
@@ -370,7 +370,7 @@ const chartData = computed(() => {
                 tension: 0.4
             },
             {
-                label: '授權失敗',
+                label: '驗證失敗',
                 backgroundColor: 'rgba(245, 108, 108, 0.2)',
                 borderColor: '#F56C6C',
                 pointBackgroundColor: '#F56C6C',

@@ -1,5 +1,5 @@
 /**
- * 獲取 radius 授權紀錄
+ * 獲取 radius 驗證紀錄
  * 
  * 參數:
  * limit? (number | 'ALL')      獲取數量 (default: 50)

@@ -47,7 +47,7 @@
                             <Key />
                         </el-icon>
                         <template #title>
-                            <span>授權紀錄</span>
+                            <span>驗證紀錄</span>
                         </template>
                     </el-menu-item>
 
@@ -229,7 +229,7 @@ const setPageTitle = () => {
             pageTitle.value = '授權管理';
             break;
         case '/logger/auth':
-            pageTitle.value = 'Radius 裝置授權紀錄';
+            pageTitle.value = 'Radius 裝置驗證紀錄';
             break;
         case '/logger/login':
             pageTitle.value = '登入紀錄';

@@ -1,5 +1,5 @@
 <!--
-    Radius 裝置授權紀錄
+    Radius 裝置驗證紀錄
 -->
 <template>
     <el-main>
@@ -45,7 +45,7 @@
                 </el-table-column>
 
                 <el-table-column prop="mac_address" label="MAC 地址" sortable min-width="150" />
-                <el-table-column prop="authdate" label="授權時間" sortable min-width="180" />
+                <el-table-column prop="authdate" label="驗證時間" sortable min-width="180" />
             </el-table>
 
             <!-- 無限滾動狀態顯示區 -->
@@ -80,7 +80,7 @@
                             <Filter />
                         </el-icon>
                     </div>
-                    <h2 class="header-title">授權紀錄過濾</h2>
+                    <h2 class="header-title">驗證紀錄過濾</h2>
                     <el-button type="text" class="close-button" @click="filterDialogVisible = false">
                         <el-icon>
                             <Close />
@@ -90,11 +90,11 @@
 
                 <!-- 卡片內容 -->
                 <div class="card-content">
-                    <p class="filter-tip">您可以設定時間範圍來過濾授權紀錄，只會顯示在此範圍內的授權資料</p>
+                    <p class="filter-tip">您可以設定時間範圍來過濾驗證紀錄，只會顯示在此範圍內的驗證紀錄資料</p>
 
                     <el-form label-position="top" class="filter-form">
-                        <!-- 授權時間範圍 -->
-                        <el-form-item label="授權時間範圍">
+                        <!-- 驗證時間範圍 -->
+                        <el-form-item label="驗證時間範圍">
                             <el-date-picker v-model="dateRange" type="daterange" range-separator="至"
                                 start-placeholder="開始日期" end-placeholder="結束日期" format="YYYY-MM-DD"
                                 value-format="YYYY-MM-DD" class="full-width" />
@@ -111,7 +111,7 @@
                             <div class="filter-tags">
                                 <el-tag v-if="filterParams.start_date && filterParams.end_date" closable
                                     @close="clearDateRangeFilter()" type="info" effect="light">
-                                    授權時間: {{ filterParams.start_date }} 至 {{ filterParams.end_date }}
+                                    驗證時間: {{ filterParams.start_date }} 至 {{ filterParams.end_date }}
                                 </el-tag>
                             </div>
                         </div>

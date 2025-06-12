@@ -173,17 +173,20 @@ const handleMacPaste = (event: ClipboardEvent) => {
     const pastedText = clipboardData.getData('text');
 
     // 清理 MAC 地址並格式化
-    const cleanedMac = pastedText.replace(/[^0-9a-fA-F]/g, '');
+    // const cleanedMac = pastedText.replace(/[^0-9a-fA-F]/g, '');
+    const cleanedMac = pastedText;
 
     // 將清理後的 MAC 地址以 XX:XX:XX:XX:XX:XX 格式設置到輸入框
-    if (cleanedMac.length <= 12) {
-        let formattedMac = '';
-        for (let i = 0; i < cleanedMac.length; i += 2) {
-            if (i > 0) formattedMac += ':';
-            formattedMac += cleanedMac.substring(i, Math.min(i + 2, cleanedMac.length));
-        }
-        newData.value.mac_address = formattedMac.toUpperCase();
-    }
+    // if (cleanedMac.length <= 12) {
+    //     let formattedMac = '';
+    //     for (let i = 0; i < cleanedMac.length; i += 2) {
+    //         if (i > 0) formattedMac += ':';
+    //         formattedMac += cleanedMac.substring(i, Math.min(i + 2, cleanedMac.length));
+    //     }
+    //     newData.value.mac_address = formattedMac.toUpperCase();
+    // }
+
+    newData.value.mac_address = cleanedMac.toUpperCase();
 };
 
 /**
