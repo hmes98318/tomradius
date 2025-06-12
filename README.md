@@ -1,7 +1,7 @@
 <img width="150" height="150" align="right" style="float: right; margin: 0 10px 0 0;" alt="freeradius-network" src="public/img/freeradius-network.svg">
 
 # Radius 認證管理平台
-此為 FreeRADIUS 認證系統網頁管理平台，使用 Node.js 和 Vue 開發。該平台使用網頁管理 FreeRADIUS 授權，用於驗證連接至 Aruba Controller 的裝置 MAC 地址是否有效。  
+使用 Node.js 和 Vue 開發，透過網頁管理 FreeRADIUS 授權，用於驗證連接至 Aruba Controller 的裝置 MAC 地址是否有效。  
 
 
 ## 使用環境
